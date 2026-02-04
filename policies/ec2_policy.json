@@ -1,0 +1,131 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+
+    /* -------------------- EKS -------------------- */
+    {
+      "Sid": "EKSClusterManagement",
+      "Effect": "Allow",
+      "Action": [
+        "eks:CreateCluster",
+        "eks:DeleteCluster",
+        "eks:DescribeCluster",
+        "eks:ListClusters",
+        "eks:UpdateClusterConfig",
+        "eks:UpdateClusterVersion",
+        "eks:CreateNodegroup",
+        "eks:DeleteNodegroup",
+        "eks:DescribeNodegroup",
+        "eks:ListNodegroups",
+        "eks:UpdateNodegroupConfig",
+        "eks:UpdateNodegroupVersion",
+        "eks:AccessKubernetesApi"
+      ],
+      "Resource": "*"
+    },
+
+    /* -------------------- EC2 Networking -------------------- */
+    {
+      "Sid": "EC2NetworkingForEKS",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*",
+        "ec2:CreateSecurityGroup",
+        "ec2:DeleteSecurityGroup",
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupEgress",
+        "ec2:CreateTags",
+        "ec2:DeleteTags"
+      ],
+      "Resource": "*"
+    },
+
+    /* -------------------- IAM PassRole (RESTRICTED) -------------------- */
+    {
+      "Sid": "AllowPassOnlyEKSAndNodeRoles",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole",
+        "iam:GetRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::<ACCOUNT_ID>:role/EKSClusterRole",
+        "arn:aws:iam::<ACCOUNT_ID>:role/EKSNodeGroupRole"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": [
+            "eks.amazonaws.com",
+            "ec2.amazonaws.com"
+          ]
+        }
+      }
+    },
+
+    /* -------------------- Auto Scaling (Node Groups) -------------------- */
+    {
+      "Sid": "AutoScalingForEKSNodes",
+      "Effect": "Allow",
+      "Action": [
+        "autoscaling:CreateAutoScalingGroup",
+        "autoscaling:UpdateAutoScalingGroup",
+        "autoscaling:DeleteAutoScalingGroup",
+        "autoscaling:Describe*"
+      ],
+      "Resource": "*"
+    },
+
+    /* -------------------- Load Balancers -------------------- */
+    {
+      "Sid": "ELBForKubernetesServices",
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:CreateLoadBalancer",
+        "elasticloadbalancing:CreateTargetGroup",
+        "elasticloadbalancing:RegisterTargets",
+        "elasticloadbalancing:DeregisterTargets",
+        "elasticloadbalancing:Modify*",
+        "elasticloadbalancing:Delete*",
+        "elasticloadbalancing:Describe*"
+      ],
+      "Resource": "*"
+    },
+
+    /* -------------------- CloudWatch Logs -------------------- */
+    {
+      "Sid": "CloudWatchLogsForEKS",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "*"
+    },
+
+    /* -------------------- CloudFormation (eksctl only) -------------------- */
+    {
+      "Sid": "CloudFormationForEksctl",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateStack",
+        "cloudformation:UpdateStack",
+        "cloudformation:DeleteStack",
+        "cloudformation:DescribeStacks",
+        "cloudformation:DescribeStackResources"
+      ],
+      "Resource": "arn:aws:cloudformation:*:*:stack/eksctl-*"
+    },
+
+    /* -------------------- STS -------------------- */
+    {
+      "Sid": "STSAccess",
+      "Effect": "Allow",
+      "Action": "sts:GetCallerIdentity",
+      "Resource": "*"
+    }
+  ]
+}
