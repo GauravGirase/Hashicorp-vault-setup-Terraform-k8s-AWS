@@ -1,8 +1,6 @@
 {
   "Version": "2012-10-17",
   "Statement": [
-
-    /* -------------------- EKS -------------------- */
     {
       "Sid": "EKSClusterManagement",
       "Effect": "Allow",
@@ -23,8 +21,6 @@
       ],
       "Resource": "*"
     },
-
-    /* -------------------- EC2 Networking -------------------- */
     {
       "Sid": "EC2NetworkingForEKS",
       "Effect": "Allow",
@@ -41,8 +37,6 @@
       ],
       "Resource": "*"
     },
-
-    /* -------------------- IAM PassRole (RESTRICTED) -------------------- */
     {
       "Sid": "AllowPassOnlyEKSAndNodeRoles",
       "Effect": "Allow",
@@ -63,8 +57,6 @@
         }
       }
     },
-
-    /* -------------------- Auto Scaling (Node Groups) -------------------- */
     {
       "Sid": "AutoScalingForEKSNodes",
       "Effect": "Allow",
@@ -76,8 +68,6 @@
       ],
       "Resource": "*"
     },
-
-    /* -------------------- Load Balancers -------------------- */
     {
       "Sid": "ELBForKubernetesServices",
       "Effect": "Allow",
@@ -92,8 +82,6 @@
       ],
       "Resource": "*"
     },
-
-    /* -------------------- CloudWatch Logs -------------------- */
     {
       "Sid": "CloudWatchLogsForEKS",
       "Effect": "Allow",
@@ -105,8 +93,6 @@
       ],
       "Resource": "*"
     },
-
-    /* -------------------- CloudFormation (eksctl only) -------------------- */
     {
       "Sid": "CloudFormationForEksctl",
       "Effect": "Allow",
@@ -119,8 +105,6 @@
       ],
       "Resource": "arn:aws:cloudformation:*:*:stack/eksctl-*"
     },
-
-    /* -------------------- STS -------------------- */
     {
       "Sid": "STSAccess",
       "Effect": "Allow",
